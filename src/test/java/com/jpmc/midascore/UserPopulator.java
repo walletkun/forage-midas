@@ -19,6 +19,10 @@ public class UserPopulator {
             String[] userData = userLine.split(", ");
             UserRecord user = new UserRecord(userData[0], Float.parseFloat(userData[1]));
             databaseConduit.save(user);
+
+            if (userData[0].equals("waldorf")) {
+                System.out.println("waldorf's balance is: " + userData[1] + " and his id is: " + user.getId());
+            }
         }
     }
 }

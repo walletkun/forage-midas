@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class KafkaProducer {
     private final String topic;
     private final KafkaTemplate<String, Transaction> kafkaTemplate;
+    private float waldorfBalance = 444.55f;
 
     public KafkaProducer(@Value("${general.kafka-topic}") String topic, KafkaTemplate<String, Transaction> kafkaTemplate) {
         this.topic = topic;
@@ -18,5 +19,17 @@ public class KafkaProducer {
     public void send(String transactionLine) {
         String[] transactionData = transactionLine.split(", ");
         kafkaTemplate.send(topic, new Transaction(Long.parseLong(transactionData[0]), Long.parseLong(transactionData[1]), Float.parseFloat(transactionData[2])));
+
+        long senderId = Long.parseLong(transactionData[0]);
+        long receiverId = Long.parseLong(transactionData[1]);
+        float amount = Float.parseFloat(transactionData[2]);
+        if (senderId == 5){
+            waldorfBalance -= amount;
+        }
+        if(receiverId == 5){
+            waldorfBalance += amount;
+        }
+
+        System.out.println("waldorf's balance is: " + waldorfBalance);
     }
 }
